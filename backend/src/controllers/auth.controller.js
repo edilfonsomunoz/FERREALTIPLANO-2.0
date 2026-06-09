@@ -1,9 +1,7 @@
 // backend/src/controllers/auth.controller.js
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import prisma from '../config/prisma.js';
 
 /**
  * 🔓 REGISTRO PÚBLICO (solo para CLIENTES)

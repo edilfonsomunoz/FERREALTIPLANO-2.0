@@ -1,27 +1,32 @@
-import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
-
-const prisma = new PrismaClient();
+import prisma from '../src/config/prisma.js';
 
 async function main() {
   console.log('🌱 Sembrando datos iniciales para Construmax...');
 
-  // 🔐 1. Usuarios de prueba (contraseña: 123456)
+  // 🔐 1. Admin principal (contraseña segura: Admin@123456)
+  const adminHash = await bcrypt.hash('Admin@123456', 10);
+
+  const admin = await prisma.user.upsert({
+    where: { email: 'admin@construmax.pe' },
+    update: {},
+    create: {
+      nombre: 'Admin Construmax',
+      email: 'admin@construmax.pe',
+      password: adminHash,
+      rol: 'ADMIN',
+      telefono: '999111222',
+      direccion: 'Av. Ilave 1234, Juliaca',
+      activo: true
+    }
+  });
+
+  console.log(`✅ Admin creado/verificado: ${admin.email}`);
+
+  // 🔐 2. Usuarios de prueba adicionales (contraseña: 123456)
   const hash = await bcrypt.hash('123456', 10);
-  
-  const [admin, vendedor, cliente] = await Promise.all([
-    prisma.user.upsert({
-      where: { email: 'admin@construmax.pe' },
-      update: {},
-      create: {
-        nombre: 'Admin Construmax',
-        email: 'admin@construmax.pe',
-        password: hash,
-        rol: 'ADMIN',
-        telefono: '999111222',
-        direccion: 'Av. Ilave 1234, Juliaca'
-      }
-    }),
+
+  await Promise.all([
     prisma.user.upsert({
       where: { email: 'vendedor@construmax.pe' },
       update: {},
@@ -83,9 +88,9 @@ async function main() {
   }
 
   console.log('✅ Seed completado:');
-  console.log(`   • 3 usuarios creados (admin, vendedor, cliente)`);
+  console.log(`   • Admin: admin@construmax.pe (contraseña: Admin@123456)`);
+  console.log(`   • Vendedor y cliente de prueba (contraseña: 123456)`);
   console.log(`   • ${productos.length} productos cargados por categoría`);
-  console.log(`   • Contraseña de prueba: 123456`);
 }
 
 main()
