@@ -24,6 +24,7 @@ import reportRoutes from './routes/report.routes.js';
 import supplierRoutes from './routes/supplier.routes.js';
 import uploadRoutes from './routes/upload.routes.js';
 import { verifyCloudinaryConnection } from './config/cloudinary.js';
+import prisma, { connectDatabase, disconnectDatabase } from './config/prisma.js';
 
 // ─────────────────────────────────────────────────────────────
 // ⚙️ CONFIGURACIÓN
@@ -60,8 +61,6 @@ app.use(express.json({ limit: '10mb' }));
 app.use('/api/upload', uploadRoutes);
 app.use(express.urlencoded({ extended: true }));
 
-verifyCloudinaryConnection();
-
 // ─────────────────────────────────────────────────────────────
 // 🌐 RUTAS PÚBLICAS
 // ─────────────────────────────────────────────────────────────
@@ -74,6 +73,25 @@ app.get('/api/health', (req, res) => {
     timestamp: new Date().toISOString(),
     env: process.env.NODE_ENV 
   });
+});
+
+// Database health check
+app.get('/api/health/db', async (req, res) => {
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+    res.json({
+      status: 'OK',
+      database: 'connected',
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(503).json({
+      status: 'ERROR',
+      database: 'disconnected',
+      error: process.env.NODE_ENV === 'development' ? error.message : 'Error de conexión con el servidor',
+      timestamp: new Date().toISOString()
+    });
+  }
 });
 
 // Rutas de autenticación (públicas)
@@ -190,14 +208,31 @@ app.use((req, res) => {
 // 🚀 INICIAR SERVIDOR
 // ─────────────────────────────────────────────────────────────
 
-app.listen(PORT, () => {
-  console.log(`🚀 Ferrealtiplano API corriendo en http://localhost:${PORT}`);
-  console.log(`📦 Environment: ${process.env.NODE_ENV}`);
-  console.log(`🔗 CORS permitido desde: ${process.env.CORS_ORIGIN || 'http://localhost:5173'}`);
-});
+const startServer = async () => {
+  // Conectar a la base de datos antes de aceptar peticiones
+  const dbConnected = await connectDatabase();
+  if (!dbConnected) {
+    console.error('❌ No se pudo conectar a la base de datos. Abortando inicio.');
+    process.exit(1);
+  }
+
+  verifyCloudinaryConnection();
+
+  app.listen(PORT, () => {
+    console.log(`🚀 Ferrealtiplano API corriendo en http://localhost:${PORT}`);
+    console.log(`📦 Environment: ${process.env.NODE_ENV}`);
+    console.log(`🔗 CORS permitido desde: ${process.env.CORS_ORIGIN || 'http://localhost:5173'}`);
+  });
+};
+
+startServer();
 
 // Cierre elegante
-process.on('SIGINT', async () => {
-  console.log('\n🛑 Cerrando conexiones...');
+const shutdown = async (signal) => {
+  console.log(`\n🛑 Señal ${signal} recibida. Cerrando conexiones...`);
+  await disconnectDatabase();
   process.exit(0);
-});
+};
+
+process.on('SIGINT', () => shutdown('SIGINT'));
+process.on('SIGTERM', () => shutdown('SIGTERM'));
