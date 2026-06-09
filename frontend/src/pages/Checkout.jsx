@@ -57,7 +57,7 @@ export default function Checkout() {
     setError('');
     
     try {
-      const { data } = await axios.post('http://localhost:4000/api/delivery/calculate', { address });
+      const { data } = await axios.post(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/delivery/calculate`, { address });
 
       if (data.success) {
         setDeliveryInfo(data.data);
@@ -143,7 +143,7 @@ export default function Checkout() {
     if (!finalLat || !finalLng) {
       setLoading(true);
       try {
-        const response = await axios.post('http://localhost:4000/api/delivery/calculate', {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/delivery/calculate`, {
           address: formData.direccion
         });
         if (response.data.success) {
@@ -179,7 +179,7 @@ export default function Checkout() {
         ...(metodoPago === 'YAPE' && { yapeReference })
       };
 
-      const response = await axios.post('http://localhost:4000/api/orders', orderData, {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/orders`, orderData, {
         headers: { 
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'

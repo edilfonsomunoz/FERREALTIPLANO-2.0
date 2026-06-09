@@ -17,7 +17,7 @@ export default function CheckoutConfirmation() {
     const fetchOrder = async () => {
       try {
         const token = localStorage.getItem('token');
-        const { data } = await fetch(`http://localhost:4000/api/orders/${id}`, {
+        const { data } = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/orders/${id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setOrder(data.data);

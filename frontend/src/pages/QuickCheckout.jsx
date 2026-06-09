@@ -26,7 +26,7 @@ export default function QuickCheckout() {
     // Cargar producto
     const fetchProduct = async () => {
       try {
-        const { data } = await axios.get(`http://localhost:4000/api/products/${id}`);
+        const { data } = await axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/products/${id}`);
         setProduct(data.data);
       } catch (err) {
         setError('Producto no encontrado');
@@ -67,7 +67,7 @@ export default function QuickCheckout() {
         ...(metodoPago === 'YAPE' && { yapeReference })
       };
 
-      await axios.post('http://localhost:4000/api/orders', orderData, {
+      await axios.post(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/orders`, orderData, {
         headers: { 
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'

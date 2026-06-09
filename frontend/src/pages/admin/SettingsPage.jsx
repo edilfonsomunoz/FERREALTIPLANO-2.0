@@ -62,7 +62,7 @@ export default function SettingsPage() {
     try {
       const token = localStorage.getItem('token');
       // Aquí enviarías todas las configuraciones al backend
-      await axios.put('http://localhost:4000/api/config', {
+      await axios.put(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/config`, {
         store: storeConfig,
         delivery: deliveryConfig,
         payments: paymentConfig,
@@ -94,7 +94,7 @@ export default function SettingsPage() {
     }
     try {
       const token = localStorage.getItem('token');
-      await axios.put('http://localhost:4000/api/auth/change-password', {
+      await axios.put(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/auth/change-password`, {
         oldPassword: securityConfig.oldPassword,
         newPassword: securityConfig.newPassword
       }, {

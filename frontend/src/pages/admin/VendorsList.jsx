@@ -25,7 +25,7 @@ export default function VendorsList() {
     try {
       const token = localStorage.getItem('token');
       const params = new URLSearchParams(filters);
-      const { data } = await axios.get(`http://localhost:4000/api/vendors?${params}`, {
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/vendors?${params}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setVendors(data.data);
@@ -45,7 +45,7 @@ export default function VendorsList() {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      await axios.post('http://localhost:4000/api/vendors', createForm, {
+      await axios.post(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/vendors`, createForm, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setShowCreateModal(false);
@@ -68,7 +68,7 @@ export default function VendorsList() {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      await axios.put(`http://localhost:4000/api/vendors/${selectedVendor.id}`, editForm, {
+      await axios.put(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/vendors/${selectedVendor.id}`, editForm, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setShowEditModal(false);
@@ -82,7 +82,7 @@ export default function VendorsList() {
   const handleToggle = async (id, currentStatus) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.patch(`http://localhost:4000/api/vendors/${id}/status`, 
+      await axios.patch(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/vendors/${id}/status`, 
         { activo: !currentStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );

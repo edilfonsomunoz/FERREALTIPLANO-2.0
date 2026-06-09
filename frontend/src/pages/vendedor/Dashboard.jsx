@@ -196,7 +196,7 @@ export default function DashboardVendedor() {
     try {
       const headers = { Authorization: `Bearer ${token}` };
 
-      const ordersRes = await axios.get('http://localhost:4000/api/orders', { 
+      const ordersRes = await axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/orders`, { 
         headers,
         params: { page: 1, limit: 500 }
       });
@@ -257,7 +257,7 @@ export default function DashboardVendedor() {
       setRealStats(stats);
 
       try {
-        const productsRes = await axios.get('http://localhost:4000/api/products', { 
+        const productsRes = await axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/products`, { 
           headers,
           params: { limit: 500 }
         });
@@ -308,7 +308,7 @@ export default function DashboardVendedor() {
 
     try {
       const headers = { Authorization: `Bearer ${token}` };
-      await axios.patch(`http://localhost:4000/api/orders/${orderId}/status`, 
+      await axios.patch(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/orders/${orderId}/status`, 
         { estado: 'EN_CAMINO' }, 
         { headers }
       );
@@ -400,7 +400,7 @@ export default function DashboardVendedor() {
         ...(paymentMethod === 'yape' && { yapeReference })
       };
 
-      const response = await axios.post('http://localhost:4000/api/orders', orderData, {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/orders`, orderData, {
         headers: {
           Authorization: `Bearer ${tokenAuth}`,
           'Content-Type': 'application/json'

@@ -40,7 +40,7 @@ export default function ProductForm() {
 
   const fetchProduct = async () => {
     try {
-      const { data } = await axios.get(`http://localhost:4000/api/products/${id}`);
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/products/${id}`);
       const product = data.data;
       setFormData({
         nombre: product.nombre,
@@ -126,7 +126,7 @@ export default function ProductForm() {
         formDataImg.append('image', file);
         
         const { data } = await axios.post(
-          'http://localhost:4000/api/upload/product',
+          `${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/upload/product`,
           formDataImg,
           {
             headers: {
@@ -213,10 +213,10 @@ export default function ProductForm() {
       };
 
       if (isEdit) {
-        await axios.put(`http://localhost:4000/api/products/${id}`, productData, config);
+        await axios.put(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/products/${id}`, productData, config);
         alert('✅ Producto actualizado exitosamente');
       } else {
-        await axios.post('http://localhost:4000/api/products', productData, config);
+        await axios.post(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/products`, productData, config);
         alert('✅ Producto creado exitosamente');
       }
 

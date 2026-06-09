@@ -116,7 +116,7 @@ export default function OrdersList() {
       if (filters.estado) params.append('estado', filters.estado);
       if (filters.busqueda) params.append('busqueda', filters.busqueda);
       
-      const { data } = await axios.get(`http://localhost:4000/api/orders?${params}`, {
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/orders?${params}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setOrders(data.data);
@@ -137,7 +137,7 @@ export default function OrdersList() {
     
     try {
       const token = localStorage.getItem('token');
-      await axios.patch(`http://localhost:4000/api/orders/${orderId}/status`, { estado: newStatus }, {
+      await axios.patch(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/orders/${orderId}/status`, { estado: newStatus }, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchOrders(); // Recargar lista
@@ -154,7 +154,7 @@ export default function OrdersList() {
     setDetailLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const { data } = await axios.get(`http://localhost:4000/api/orders/${orderId}`, {
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/orders/${orderId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setSelectedOrder(data.data);

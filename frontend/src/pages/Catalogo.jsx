@@ -43,8 +43,8 @@ export default function Catalogo() {
     const loadMetadata = async () => {
       try {
         const [catsRes, priceRes] = await Promise.all([
-          axios.get('http://localhost:4000/api/products/categories'),
-          axios.get('http://localhost:4000/api/products/price-range')
+          axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/products/categories`),
+          axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/products/price-range`)
         ]);
         setCategorias(catsRes.data.data);
         setPriceRange(priceRes.data.data);
@@ -78,7 +78,7 @@ export default function Catalogo() {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        const { data } = await axios.get(`http://localhost:4000/api/products?${searchParams.toString()}`);
+        const { data } = await axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/products?${searchParams.toString()}`);
         
         // ✅ Normalizar precios a número
         const normalizedProducts = data.data.map(product => ({

@@ -19,7 +19,7 @@ export default function ProductDetail() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const { data } = await axios.get(`http://localhost:4000/api/products/${id}`);
+        const { data } = await axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/products/${id}`);
         setProduct(data.data);
         setSelectedImage(0);
       } catch (err) {

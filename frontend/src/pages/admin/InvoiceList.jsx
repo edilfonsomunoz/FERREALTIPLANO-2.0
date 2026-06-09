@@ -14,7 +14,7 @@ export default function InvoiceList() {
     try {
       const token = localStorage.getItem('token');
       // Obtener todos los pedidos con comprobantes
-      const { data } = await axios.get('http://localhost:4000/api/orders/my-orders', {
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/orders/my-orders`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
@@ -31,7 +31,7 @@ export default function InvoiceList() {
   const downloadPDF = async (pedidoId, serie, numero) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:4000/api/invoices/${pedidoId}/download`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/invoices/${pedidoId}/download`, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -62,7 +62,7 @@ export default function InvoiceList() {
     try {
       const token = localStorage.getItem('token');
       await axios.post(
-        `http://localhost:4000/api/invoices/${pedidoId}/cancel`,
+        `${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/invoices/${pedidoId}/cancel`,
         { motivo },
         { headers: { Authorization: `Bearer ${token}` } }
       );

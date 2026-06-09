@@ -31,7 +31,7 @@ export default function InventoryList() {
     try {
       const token = localStorage.getItem('token');
       const params = new URLSearchParams(filters);
-      const { data } = await axios.get(`http://localhost:4000/api/inventory?${params}`, {
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/inventory?${params}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setInventory(data.data);
@@ -46,7 +46,7 @@ export default function InventoryList() {
   const fetchAlerts = async () => {
     try {
       const token = localStorage.getItem('token');
-      const { data } = await axios.get('http://localhost:4000/api/inventory/alerts', {
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/inventory/alerts`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setAlerts(data.data);
@@ -73,7 +73,7 @@ export default function InventoryList() {
     
     try {
       const token = localStorage.getItem('token');
-      await axios.post('http://localhost:4000/api/inventory/adjust', {
+      await axios.post(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/inventory/adjust`, {
         productId: selectedProduct.id,
         cantidad: parseInt(adjustForm.cantidad),
         motivo: adjustForm.motivo,
@@ -95,7 +95,7 @@ export default function InventoryList() {
     setSelectedProduct(product);
     try {
       const token = localStorage.getItem('token');
-      const { data } = await axios.get(`http://localhost:4000/api/inventory/movements?productId=${product.id}`, {
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/inventory/movements?productId=${product.id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setMovements(data.data);

@@ -23,8 +23,8 @@ export default function ReportsPage() {
       
       // Paralelizar llamadas
       const [reportRes, historyRes] = await Promise.all([
-        axios.get(`http://localhost:4000/api/reports/sales?${params}`, { headers: { Authorization: `Bearer ${token}` } }),
-        axios.get(`http://localhost:4000/api/reports/history?${params}&limit=5`, { headers: { Authorization: `Bearer ${token}` } })
+        axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/reports/sales?${params}`, { headers: { Authorization: `Bearer ${token}` } }),
+        axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/reports/history?${params}&limit=5`, { headers: { Authorization: `Bearer ${token}` } })
       ]);
 
       setReport(reportRes.data.data);

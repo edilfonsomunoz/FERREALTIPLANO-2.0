@@ -114,7 +114,7 @@ export default function Cotizador() {
     setError('');
 
     try {
-      const { data } = await axios.post('http://localhost:4000/api/quotes/calculate', {
+      const { data } = await axios.post(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/quotes/calculate`, {
         projectType,
         measurements: {
           area: area > 0 ? area : undefined,
@@ -141,7 +141,7 @@ export default function Cotizador() {
     try {
       // Opción A: Descargar desde backend
       const response = await axios.post(
-        'http://localhost:4000/api/quotes/pdf',
+        `${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/quotes/pdf`,
         { quoteData: quote },
         { responseType: 'blob' }
       );

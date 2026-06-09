@@ -33,7 +33,7 @@ export default function CustomersList() {
       if (filters.fechaDesde) params.append('fechaDesde', filters.fechaDesde);
       if (filters.fechaHasta) params.append('fechaHasta', filters.fechaHasta);
       
-      const { data } = await axios.get(`http://localhost:4000/api/customers?${params}`, {
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/customers?${params}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setCustomers(data.data);
@@ -54,7 +54,7 @@ export default function CustomersList() {
     setDetailLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const { data } = await axios.get(`http://localhost:4000/api/customers/${id}`, {
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/customers/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setSelectedCustomer(data.data);
@@ -84,7 +84,7 @@ export default function CustomersList() {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      await axios.put(`http://localhost:4000/api/customers/${selectedCustomer.id}`, editForm, {
+      await axios.put(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/customers/${selectedCustomer.id}`, editForm, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setShowEditModal(false);
@@ -103,7 +103,7 @@ export default function CustomersList() {
     
     try {
       const token = localStorage.getItem('token');
-      await axios.patch(`http://localhost:4000/api/customers/${customerId}/status`, 
+      await axios.patch(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/customers/${customerId}/status`, 
         { activo: !currentStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -117,7 +117,7 @@ export default function CustomersList() {
   const handleExport = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:4000/api/customers/export', {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/customers/export`, {
         headers: { Authorization: `Bearer ${token}` },
         responseType: 'blob'
       });

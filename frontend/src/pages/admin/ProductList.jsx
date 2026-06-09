@@ -17,7 +17,7 @@ export default function ProductList() {
       if (busqueda) params.append('busqueda', busqueda);
       if (categoria) params.append('categoria', categoria);
 
-      const { data } = await axios.get(`http://localhost:4000/api/products?${params}`, {
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/products?${params}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setProducts(data.data);
@@ -37,7 +37,7 @@ export default function ProductList() {
     
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:4000/api/products/${id}`, {
+      await axios.delete(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/products/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchProducts();

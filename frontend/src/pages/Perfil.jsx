@@ -14,7 +14,7 @@ export default function Perfil() {
     const fetchOrders = async () => {
       try {
         const token = localStorage.getItem('token');
-        const { data } = await axios.get('http://localhost:4000/api/orders/my-orders', {
+        const { data } = await axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/orders/my-orders`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setOrders(data.data);
@@ -44,7 +44,7 @@ export default function Perfil() {
 const downloadPDF = async (pedidoId) => {
   try {
     const token = localStorage.getItem('token');
-    const response = await fetch(`http://localhost:4000/api/invoices/${pedidoId}/download`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:4000/api"}/invoices/${pedidoId}/download`, {
       headers: { Authorization: `Bearer ${token}` }
     });
 
